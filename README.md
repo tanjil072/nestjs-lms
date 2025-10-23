@@ -25,74 +25,156 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+## nestjs-lms
+
+A simple Learning Management System (LMS) API built with NestJS, TypeScript and MongoDB. This repository contains API endpoints for user registration/login, course management, and role-based authorization.
+
+## Key features
+
+- NestJS (TypeScript) server
+- MongoDB (Mongoose) for persistence
+- JWT authentication and role guards
+- DTO validation using class-validator
+- Unit and e2e tests with Jest
+
+## Tech stack
+
+- Node.js 18+ (or compatible)
+- NestJS 11
+- TypeScript
+- MongoDB
+- pnpm (recommended) or npm/yarn
+
+## Prerequisites
+
+- Node.js (v18 or later recommended)
+- pnpm (recommended) or npm
+- A running MongoDB instance (local or cloud)
+
+## Installation
+
+Clone the repo and install dependencies:
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+If you prefer npm:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+npm install
 ```
 
-## Run tests
+## Environment variables
+
+Create a `.env` file in the project root (or set environment variables in your host). The application expects at least the following variables:
+
+- MONGO_URI - MongoDB connection string (required)
+- JWT_SECRET - Secret used to sign JWT tokens (required)
+- PORT - Optional. Defaults to 3000 if not set.
+
+Example `.env`:
+
+```env
+MONGO_URI=mongodb://localhost:27017/nestjs-lms
+JWT_SECRET=supersecretkey
+PORT=3000
+```
+
+Note: `src/auth/constants.ts` reads `JWT_SECRET` from `process.env.JWT_SECRET` and `src/app.module.ts` reads `MONGO_URI`.
+
+## Running the app
+
+Development (watch mode):
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm run start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Production build + start:
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm run build
+pnpm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Useful scripts (from `package.json`):
 
-## Resources
+- `start` - Run compiled app via `nest start`
+- `start:dev` - Start with watch
+- `start:prod` - Run built `dist/main`
+- `build` - Compile TypeScript
+- `test` - Run Jest unit tests
+- `test:e2e` - Run e2e tests
+- `test:cov` - Test coverage
 
-Check out a few resources that may come in handy when working with NestJS:
+## API overview
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+This project contains the following modules/APIs (high level):
 
-## Support
+- Auth (register/login)
+  - POST /auth/register - Register a new user
+  - POST /auth/login - Authenticate and receive JWT
+- Users
+  - User creation is handled during registration
+- Courses
+  - CRUD endpoints for courses (protected by auth/roles)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Refer to the controllers in `src/auth`, `src/user`, and `src/course` for specific routes and DTO shapes.
 
-## Stay in touch
+## Tests
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Run unit tests:
+
+```bash
+pnpm run test
+```
+
+Run e2e tests:
+
+```bash
+pnpm run test:e2e
+```
+
+Generate coverage report:
+
+```bash
+pnpm run test:cov
+```
+
+## Linting & Formatting
+
+The project includes ESLint and Prettier configuration. To format code:
+
+```bash
+pnpm run format
+```
+
+To run lint autofix:
+
+```bash
+pnpm run lint
+```
+
+## Contribution
+
+Contributions are welcome. Typical workflow:
+
+1. Fork the repo
+2. Create a branch for your feature/fix
+3. Add tests for new behavior
+4. Open a pull request with a clear description
+
+## Notes & next steps
+
+- Consider adding an OpenAPI (Swagger) setup for interactive API docs.
+- Add more tests for services and guards.
+- Add CI (GitHub Actions) for linting, tests and builds.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is currently marked as `UNLICENSED` in `package.json`. Update `package.json` and this README if you add a license.
+
+---
+
+If you'd like, I can also add a minimal `.env.example` and enable Swagger docs. Tell me which you'd prefer next.
