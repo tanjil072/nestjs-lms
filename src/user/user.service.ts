@@ -29,4 +29,8 @@ export class UserService {
   async fetchUserByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
   }
+
+  async getUserById(userId: string): Promise<User | null> {
+    return this.userModel.findOne({ _id: userId }).exec();
+  }
 }
