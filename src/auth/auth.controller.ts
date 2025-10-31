@@ -6,6 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { UserService } from 'src/user/user.service';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
@@ -19,12 +20,14 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
   @Post('register')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   async registerUser(@Body() registerUserDto: RegisterDto) {
     const token = await this.authService.registerUser(registerUserDto);
     return token;
   }
 
   @Post('login')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   async loginUser(@Body() loginDto: LoginDto) {
     const { access_token } = await this.authService.loginUser(loginDto);
     return { access_token };
